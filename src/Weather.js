@@ -10,10 +10,15 @@ export default function Weather() {
               type="search"
               placeholder="Enter a city..."
               className="form-control"
+              autoFocus="on"
             />
           </div>
           <div className="col-3">
-            <input type="submit" value="Search" className="btn btn-primary" />
+            <input
+              type="submit"
+              value="Search"
+              className="btn btn-primary w-100"
+            />
           </div>
         </div>
       </form>
@@ -22,13 +27,19 @@ export default function Weather() {
         <li>Saturday 22:45</li>
         <li>Partially cloudy</li>
       </ul>
-      <div className="row">
+      <div className="row mt-3">
         <div className="col-6">
-          <img
-            src="https://www.gstatic.com/weather/conditions2023/2023.2/svg/partly_cloudy_night_light.svg"
-            alt="Partially cloudy"
-          />
-          11℃
+          <div className="clearfix">
+            <img
+              src="https://www.gstatic.com/weather/conditions2023/2023.2/svg/partly_cloudy_night_light.svg"
+              alt="Partially cloudy"
+              className="float-left"
+            />
+            <div className="float-left">
+              <span className="temperature">11</span>
+              <span className="unit">℃</span>
+            </div>
+          </div>
         </div>
         <div className="col-6">
           <ul>
