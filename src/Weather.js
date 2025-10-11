@@ -15,7 +15,6 @@ export default function Weather(props) {
       iconUrl:
         "https://www.gstatic.com/weather/conditions2023/2023.2/svg/partly_cloudy_night_light.svg",
     });
-    setReady(true);
   }
   if (weatherData.ready) {
     return (
