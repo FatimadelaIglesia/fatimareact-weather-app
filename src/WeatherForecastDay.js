@@ -1,17 +1,17 @@
 import React from "react";
 import WeatherIcon from "./WeatherIcon";
 
-export default function WeatherForecastDay({ data, timezone }) {
+export default function WeatherForecastDay({ data }) {
   function maxTemperature() {
-    return `${Math.round(data.temp.max)}°`;
+    return Math.round(data.temp.max);
   }
 
   function minTemperature() {
-    return `${Math.round(data.temp.min)}°`;
+    return Math.round(data.temp.min);
   }
 
   function day() {
-    const date = new Date((data.dt + timezone) * 1000);
+    const date = new Date(data.dt * 1000);
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     return days[date.getUTCDay()];
   }
@@ -22,10 +22,10 @@ export default function WeatherForecastDay({ data, timezone }) {
       <WeatherIcon code={data.weather[0].icon} size={36} />
       <div className="WeatherForecast-temperatures">
         <span className="WeatherForecast-temperature-max">
-          {maxTemperature()}
+          {maxTemperature()}°
         </span>
         <span className="WeatherForecast-temperature-min">
-          {minTemperature()}
+          {minTemperature()}°
         </span>
       </div>
     </div>

@@ -4,39 +4,67 @@ import "./Weather.css";
 import WeatherInfo from "./WeatherInfo";
 import WeatherForecast from "./WeatherForecast";
 
-export default function Weather(props) {
+export default function Weather({ defaultCity }) {
   const [weatherData, setWeatherData] = useState({ ready: false });
-  const [city, setCity] = useState(props.defaultCity);
+  const [city, setCity] = useState(defaultCity);
+  const [error, setError] = useState(null);
 
+  // Fetch current weather whenever 'city' changes
   useEffect(() => {
-    const apiKey = "f81614abe2395d5dfecd45b9298041de";
+    const apiKey = "4b3503b2f08a729413c4d33ef1186004";
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-    axios.get(apiUrl).then((response) => {
-      setWeatherData({
-        ready: true,
-        coordinates: response.data.coord,
-        temperature: response.data.main.temp,
-        humidity: response.data.main.humidity,
-        wind: response.data.wind.speed,
-        city: response.data.name,
-        date: new Date(response.data.dt * 1000),
-        description: response.data.weather[0].description,
-        icon: response.data.weather[0].icon,
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        setWeatherData({
+          ready: true,
+          coordinates: response.data.coord,
+          temperature: response.data.main.temp,
+          humidity: response.data.main.humidity,
+          wind: response.data.wind.speed,
+          city: response.data.name,
+          date: new Date(response.data.dt * 1000),
+          description: response.data.weather[0].description,
+          icon: response.data.weather[0].icon,
+        });
+        setError(null);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("City not found or API key invalid.");
+        setWeatherData({ ready: false });
       });
-    });
   }, [city]);
 
   function handleSubmit(event) {
     event.preventDefault();
+    // 'city' is already updated via input, useEffect handles fetch
   }
 
   function handleCityChange(event) {
     setCity(event.target.value);
   }
 
+  if (error) {
+    return (
+      <div className="Weather">
+        <p>{error}</p>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="search"
+            placeholder="Enter a city..."
+            onChange={handleCityChange}
+            value={city}
+          />
+          <button type="submit">Search</button>
+        </form>
+      </div>
+    );
+  }
+
   if (!weatherData.ready) {
-    return <p>Loading...</p>;
+    return <p>Loading weather...</p>;
   }
 
   return (

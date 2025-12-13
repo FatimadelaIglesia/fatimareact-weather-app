@@ -1,28 +1,31 @@
 import React, { useState, useEffect } from "react";
-import "./WeatherForecast.css";
-import WeatherForecastDay from "./WeatherForecastDay";
 import axios from "axios";
+import WeatherForecastDay from "./WeatherForecastDay";
 
 export default function WeatherForecast({ coordinates }) {
   const [loaded, setLoaded] = useState(false);
   const [forecast, setForecast] = useState(null);
-  const [timezone, setTimezone] = useState(null);
 
   useEffect(() => {
     if (!coordinates) return;
 
     const { lat, lon } = coordinates;
-    const apiKey = "f81614abe2395d5dfecd45b9298041de";
+    const apiKey = "4b3503b2f08a729413c4d33ef1186004";
     const apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
 
-    axios.get(apiUrl).then((response) => {
-      setForecast(response.data.daily);
-      setTimezone(response.data.timezone_offset);
-      setLoaded(true);
-    });
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        setForecast(response.data.daily);
+        setLoaded(true);
+      })
+      .catch((err) => {
+        console.error("Forecast error:", err);
+        setLoaded(false);
+      });
   }, [coordinates]);
 
-  if (!loaded || !forecast || forecast.length === 0) {
+  if (!loaded || !forecast) {
     return <p>Loading forecast...</p>;
   }
 
@@ -31,7 +34,7 @@ export default function WeatherForecast({ coordinates }) {
       <div className="row">
         {forecast.slice(1, 6).map((day, index) => (
           <div className="col" key={index}>
-            <WeatherForecastDay data={day} timezone={timezone} />
+            <WeatherForecastDay data={day} />
           </div>
         ))}
       </div>
