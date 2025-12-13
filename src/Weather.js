@@ -8,9 +8,8 @@ export default function Weather(props) {
   const [weatherData, setWeatherData] = useState({ ready: false });
   const [city, setCity] = useState(props.defaultCity);
 
-  // fetch weather data whenever the city changes
   useEffect(() => {
-    const apiKey = "203fa770242fcd2b9555d832a88ea567";
+    const apiKey = "f81614abe2395d5dfecd45b9298041de";
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
     axios.get(apiUrl).then((response) => {
@@ -26,11 +25,10 @@ export default function Weather(props) {
         icon: response.data.weather[0].icon,
       });
     });
-  }, [city]); // dependency array includes 'city' → ESLint happy
+  }, [city]);
 
   function handleSubmit(event) {
     event.preventDefault();
-    setWeatherData({ ready: false }); // optional: show loading while fetching
   }
 
   function handleCityChange(event) {
