@@ -3,31 +3,26 @@ import "./WeatherForecast.css";
 import WeatherForecastDay from "./WeatherForecastDay";
 import axios from "axios";
 
-export default function WeatherForecast(props) {
+export default function WeatherForecast({ coordinates }) {
   const [loaded, setLoaded] = useState(false);
   const [forecast, setForecast] = useState(null);
   const [timezone, setTimezone] = useState(null);
 
   useEffect(() => {
-    if (!props.coordinates) return;
+    if (!coordinates) return;
 
-    const latitude = props.coordinates.lat;
-    const longitude = props.coordinates.lon;
-
+    const { lat, lon } = coordinates;
     const apiKey = "c6f8ef4575250284954db9f4dfa7a996";
-    const apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
 
-    axios.get(apiUrl).then(handleResponse);
-  }, [props.coordinates]);
+    axios.get(apiUrl).then((response) => {
+      setForecast(response.data.daily);
+      setTimezone(response.data.timezone_offset);
+      setLoaded(true);
+    });
+  }, [coordinates]);
 
-  function handleResponse(response) {
-    setForecast(response.data.daily);
-    setTimezone(response.data.timezone_offset);
-    setLoaded(true);
-  }
-
-  // ✅ Guard against null forecast
-  if (!loaded || !forecast) {
+  if (!loaded || !forecast || forecast.length === 0) {
     return <p>Loading forecast...</p>;
   }
 
