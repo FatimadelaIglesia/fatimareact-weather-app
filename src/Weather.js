@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Weather.css";
 import WeatherInfo from "./WeatherInfo";
@@ -21,49 +21,55 @@ export default function Weather(props) {
       icon: response.data.weather[0].icon,
     });
   }
+
   function search() {
-    const apiKey = "c8735bb7e8e2f8d8a38c7501f3cd47d3";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    const apiKey = "YOUR_API_KEY";
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
     axios.get(apiUrl).then(handleResponse);
   }
 
+  useEffect(() => {
+    search(); // fetch default city once
+  }, []);
+
   function handleSubmit(event) {
     event.preventDefault();
-    search(city);
+    search();
   }
+
   function handleCityChange(event) {
     setCity(event.target.value);
   }
 
-  if (weatherData.ready) {
-    return (
-      <div className="Weather">
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-9">
-              <input
-                type="search"
-                placeholder="Enter a city..."
-                className="form-control"
-                autoFocus
-                onChange={handleCityChange}
-              />
-            </div>
-            <div className="col-3">
-              <input
-                type="submit"
-                value="Search"
-                className="btn btn-primary w-100"
-              />
-            </div>
-          </div>
-        </form>
-        <WeatherInfo data={weatherData} />
-        <WeatherForecast coord={weatherData.coordinates} />
-      </div>
-    );
-  } else {
-    search();
-    return "Loading...";
+  if (!weatherData.ready) {
+    return <p>Loading...</p>;
   }
+
+  return (
+    <div className="Weather">
+      <form onSubmit={handleSubmit}>
+        <div className="row">
+          <div className="col-9">
+            <input
+              type="search"
+              placeholder="Enter a city..."
+              className="form-control"
+              autoFocus
+              onChange={handleCityChange}
+              value={city}
+            />
+          </div>
+          <div className="col-3">
+            <input
+              type="submit"
+              value="Search"
+              className="btn btn-primary w-100"
+            />
+          </div>
+        </div>
+      </form>
+      <WeatherInfo data={weatherData} />
+      <WeatherForecast coordinates={weatherData.coordinates} />
+    </div>
+  );
 }
