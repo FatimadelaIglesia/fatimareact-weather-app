@@ -1,31 +1,47 @@
-import React, { useState } from "react";
-import WeatherIcon from "./WeatherIcon";
+import React, { useState, useEffect } from "react";
 import "./WeatherForecast.css";
 import WeatherForecastDay from "./WeatherForecastDay";
 import axios from "axios";
+
 export default function WeatherForecast(props) {
-  let [loaded, setLoaded] = useState(false);
-  let [forecast, setForecast] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const [forecast, setForecast] = useState(null);
+  const [timezone, setTimezone] = useState(null);
+
+  useEffect(() => {
+    const latitude = props.coordinates.lat;
+    const longitude = props.coordinates.lon;
+
+    const apiKey = "c6f8ef4575250284954db9f4dfa7a996";
+    const apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+
+    axios.get(apiUrl).then(handleResponse);
+  }, [props.coordinates]);
+
   function handleResponse(response) {
     setForecast(response.data.daily);
+    setTimezone(response.data.timezone_offset);
     setLoaded(true);
   }
-  if (loaded) {
-    return (
-      <div className="WeatherForecast">
-        <div className="row">
-          <div className="col">
-            <WeatherForecastDay data={forecast[0]} timezone={props.timezone} />
-          </div>
-        </div>
-      </div>
-    );
-  } else {
-    let apiKey = "c6f8ef4575250284954db9f4dfa7a996";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
-    let latitude = props.coordinates.lat;
-    let longitude = props.coordinates.lon;
-    axios.get(apiUrl).then(handleResponse);
+
+  if (!loaded) {
     return null;
   }
+
+  return (
+    <div className="WeatherForecast">
+      <div className="row">
+        {forecast.map((day, index) => {
+          if (index > 0 && index < 6) {
+            return (
+              <div className="col" key={index}>
+                <WeatherForecastDay data={day} timezone={timezone} />
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+    </div>
+  );
 }
