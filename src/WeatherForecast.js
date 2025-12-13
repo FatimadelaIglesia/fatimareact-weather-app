@@ -9,6 +9,8 @@ export default function WeatherForecast(props) {
   const [timezone, setTimezone] = useState(null);
 
   useEffect(() => {
+    if (!props.coordinates) return;
+
     const latitude = props.coordinates.lat;
     const longitude = props.coordinates.lon;
 
