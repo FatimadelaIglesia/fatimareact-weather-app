@@ -12,7 +12,7 @@ export default function WeatherForecast({ coordinates }) {
     if (!coordinates) return;
 
     const { lat, lon } = coordinates;
-    const apiKey = "c6f8ef4575250284954db9f4dfa7a996";
+    const apiKey = "203fa770242fcd2b9555d832a88ea567";
     const apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
 
     axios.get(apiUrl).then((response) => {
