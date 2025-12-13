@@ -15,7 +15,7 @@ export default function WeatherForecast(props) {
       <div className="WeatherForecast">
         <div className="row">
           <div className="col">
-            <WeatherForecastDay data={forecast[0]} />
+            <WeatherForecastDay data={forecast[0]} timezone={props.timezone} />
           </div>
         </div>
       </div>
