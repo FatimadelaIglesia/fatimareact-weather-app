@@ -26,11 +26,6 @@ export default function WeatherForecast(props) {
     setLoaded(true);
   }
 
-  // ✅ Safe render if data not ready
-  if (!props.coordinates || !loaded || !forecast) {
-    return <p>Loading forecast...</p>;
-  }
-
   return (
     <div className="WeatherForecast">
       <div className="row">
