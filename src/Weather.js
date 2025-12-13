@@ -9,17 +9,23 @@ export default function Weather({ defaultCity }) {
   const [city, setCity] = useState(defaultCity);
   const [error, setError] = useState(null);
 
-  // Fetch current weather whenever 'city' changes
   useEffect(() => {
+    if (!city) return;
+
     const apiKey = "4b3503b2f08a729413c4d33ef1186004";
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    // Step 1: Get city coordinates using Current Weather API
+    const geoUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
     axios
-      .get(apiUrl)
+      .get(geoUrl)
       .then((response) => {
+        const { lat, lon } = response.data.coord;
+
+        // Set current weather data
         setWeatherData({
           ready: true,
-          coordinates: response.data.coord,
+          coordinates: { lat, lon },
           temperature: response.data.main.temp,
           humidity: response.data.main.humidity,
           wind: response.data.wind.speed,
@@ -28,6 +34,7 @@ export default function Weather({ defaultCity }) {
           description: response.data.weather[0].description,
           icon: response.data.weather[0].icon,
         });
+
         setError(null);
       })
       .catch((err) => {
@@ -39,7 +46,7 @@ export default function Weather({ defaultCity }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    // 'city' is already updated via input, useEffect handles fetch
+    // useEffect will fetch weather automatically when city changes
   }
 
   function handleCityChange(event) {
@@ -90,6 +97,7 @@ export default function Weather({ defaultCity }) {
           </div>
         </div>
       </form>
+
       <WeatherInfo data={weatherData} />
       <WeatherForecast coordinates={weatherData.coordinates} />
     </div>
