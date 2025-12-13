@@ -10,7 +10,7 @@ export default function Weather(props) {
 
   // fetch weather data whenever the city changes
   useEffect(() => {
-    const apiKey = "c6f8ef4575250284954db9f4dfa7a996";
+    const apiKey = "203fa770242fcd2b9555d832a88ea567";
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
     axios.get(apiUrl).then((response) => {
