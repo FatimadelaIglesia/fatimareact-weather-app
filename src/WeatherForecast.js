@@ -26,19 +26,19 @@ export default function WeatherForecast(props) {
     setLoaded(true);
   }
 
+  // ✅ Guard against null forecast
+  if (!loaded || !forecast) {
+    return <p>Loading forecast...</p>;
+  }
+
   return (
     <div className="WeatherForecast">
       <div className="row">
-        {forecast.map((day, index) => {
-          if (index > 0 && index < 6) {
-            return (
-              <div className="col" key={index}>
-                <WeatherForecastDay data={day} timezone={timezone} />
-              </div>
-            );
-          }
-          return null;
-        })}
+        {forecast.slice(1, 6).map((day, index) => (
+          <div className="col" key={index}>
+            <WeatherForecastDay data={day} timezone={timezone} />
+          </div>
+        ))}
       </div>
     </div>
   );
