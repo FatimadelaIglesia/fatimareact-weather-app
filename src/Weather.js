@@ -13,8 +13,6 @@ export default function Weather({ defaultCity }) {
     if (!city) return;
 
     const apiKey = "4b3503b2f08a729413c4d33ef1186004";
-
-    // Step 1: Get city coordinates using Current Weather API
     const geoUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
     axios
@@ -22,7 +20,6 @@ export default function Weather({ defaultCity }) {
       .then((response) => {
         const { lat, lon } = response.data.coord;
 
-        // Set current weather data
         setWeatherData({
           ready: true,
           coordinates: { lat, lon },
@@ -46,7 +43,7 @@ export default function Weather({ defaultCity }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    // useEffect will fetch weather automatically when city changes
+    // useEffect fetches automatically
   }
 
   function handleCityChange(event) {

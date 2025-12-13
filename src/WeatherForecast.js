@@ -12,12 +12,16 @@ export default function WeatherForecast({ coordinates }) {
     if (!coordinates) return;
 
     const apiKey = "4b3503b2f08a729413c4d33ef1186004";
-    const apiUrl = `https://api.openweathermap.org/data/3.0/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
 
     axios
       .get(apiUrl)
       .then((response) => {
-        setForecast(response.data.daily); // 7-day forecast
+        if (!response.data.daily) {
+          setError("No forecast data available.");
+          return;
+        }
+        setForecast(response.data.daily);
         setLoaded(true);
         setError(null);
       })
