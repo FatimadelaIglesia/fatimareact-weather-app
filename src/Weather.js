@@ -8,33 +8,29 @@ export default function Weather(props) {
   const [weatherData, setWeatherData] = useState({ ready: false });
   const [city, setCity] = useState(props.defaultCity);
 
-  function handleResponse(response) {
-    setWeatherData({
-      ready: true,
-      coordinates: response.data.coord,
-      temperature: response.data.main.temp,
-      humidity: response.data.main.humidity,
-      wind: response.data.wind.speed,
-      city: response.data.name,
-      date: new Date(response.data.dt * 1000),
-      description: response.data.weather[0].description,
-      icon: response.data.weather[0].icon,
-    });
-  }
-
-  function search() {
-    const apiKey = "YOUR_API_KEY";
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-    axios.get(apiUrl).then(handleResponse);
-  }
-
+  // fetch weather data whenever the city changes
   useEffect(() => {
-    search(); // fetch default city once
-  }, []);
+    const apiKey = "c6f8ef4575250284954db9f4dfa7a996";
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    axios.get(apiUrl).then((response) => {
+      setWeatherData({
+        ready: true,
+        coordinates: response.data.coord,
+        temperature: response.data.main.temp,
+        humidity: response.data.main.humidity,
+        wind: response.data.wind.speed,
+        city: response.data.name,
+        date: new Date(response.data.dt * 1000),
+        description: response.data.weather[0].description,
+        icon: response.data.weather[0].icon,
+      });
+    });
+  }, [city]); // dependency array includes 'city' → ESLint happy
 
   function handleSubmit(event) {
     event.preventDefault();
-    search();
+    setWeatherData({ ready: false }); // optional: show loading while fetching
   }
 
   function handleCityChange(event) {
