@@ -23,39 +23,21 @@ export default function WeatherTemperature({ celsius }) {
         {unit === "celsius" ? Math.round(celsius) : Math.round(fahrenheit())}
       </span>
       <span className="unit">
-        {unit === "celsius" ? (
-          <>
-            ℃ |{" "}
-            <button
-              type="button"
-              onClick={showFahrenheit}
-              style={{
-                background: "none",
-                border: "none",
-                padding: 0,
-                cursor: "pointer",
-              }}
-            >
-              °F
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              type="button"
-              onClick={showCelsius}
-              style={{
-                background: "none",
-                border: "none",
-                padding: 0,
-                cursor: "pointer",
-              }}
-            >
-              °C
-            </button>{" "}
-            | °F
-          </>
-        )}
+        <button
+          type="button"
+          onClick={showCelsius}
+          className={unit === "celsius" ? "active" : ""}
+        >
+          ℃
+        </button>
+        {" | "}
+        <button
+          type="button"
+          onClick={showFahrenheit}
+          className={unit === "fahrenheit" ? "active" : ""}
+        >
+          °F
+        </button>
       </span>
     </div>
   );
