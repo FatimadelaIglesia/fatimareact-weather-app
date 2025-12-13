@@ -26,15 +26,33 @@ export default function WeatherTemperature({ celsius }) {
         {unit === "celsius" ? (
           <>
             ℃ |{" "}
-            <a href="#" onClick={showFahrenheit}>
+            <button
+              type="button"
+              onClick={showFahrenheit}
+              style={{
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+              }}
+            >
               °F
-            </a>
+            </button>
           </>
         ) : (
           <>
-            <a href="#" onClick={showCelsius}>
+            <button
+              type="button"
+              onClick={showCelsius}
+              style={{
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+              }}
+            >
               °C
-            </a>{" "}
+            </button>{" "}
             | °F
           </>
         )}
