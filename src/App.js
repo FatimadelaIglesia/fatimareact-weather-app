@@ -1,21 +1,33 @@
-import React from "react";
+import "./styles.css";
+import { StrictMode } from "react";
 import Weather from "./Weather";
-import "./App.css";
 
 export default function App() {
   return (
     <div className="App">
       <div className="container">
-        <Weather defaultCity="London" />
+        <Weather defaultCity="New York" />
         <footer>
-          This project is created by Fatima de la Iglesia and is{" "}
-          <a
-            href="https://github.com/FatimadelaIglesia/fatimareact-weather-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            open sourced on GitHub
-          </a>
+          <p>
+            This project was coded by{" "}
+            <a href="https://github.com/FatimadelaIglesia" target="_blank">
+              Fatima de la Iglesia
+            </a>{" "}
+            and is{" "}
+            <a
+              href="https://github.com/FatimadelaIglesia/fatimareact-weather-app"
+              target="_blank"
+            >
+              on GitHub
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://fatimareactweatherapp.netlify.app/"
+              target="_blank"
+            >
+              hosted on Netlify
+            </a>
+          </p>
         </footer>
       </div>
     </div>
