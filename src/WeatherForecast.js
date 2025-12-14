@@ -15,17 +15,17 @@ export default function WeatherForecast(props) {
     setLoaded(false);
 
     const apiKey = "515c9ddbeb3cda9061acfab71031839e";
-    const apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${lon}&lat=${lat}&key=${apiKey}&units=metric`;
-
+    const apiUrl = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${API key}&units=metric`
     axios
       .get(apiUrl)
       .then((response) => {
         setForecast(response.data.daily);
         setLoaded(true);
       })
-      .catch((error) => {
-        console.error("Error fetching forecast:", error);
-      });
+      
+  .catch((error) => {
+    console.error("Error fetching forecast:", error);
+  });
   }, [lat, lon]);
 
   if (!loaded) {
