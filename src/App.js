@@ -10,13 +10,18 @@ export default function App() {
         <footer>
           <p>
             This project was coded by{" "}
-            <a href="https://github.com/FatimadelaIglesia" target="_blank">
+            <a
+              href="https://github.com/FatimadelaIglesia"
+              target="_blank"
+              rel="noreferrer"
+            >
               Fatima de la Iglesia
             </a>{" "}
             and is{" "}
             <a
               href="https://github.com/FatimadelaIglesia/fatimareact-weather-app"
               target="_blank"
+              rel="noreferrer"
             >
               on GitHub
             </a>{" "}
@@ -24,6 +29,7 @@ export default function App() {
             <a
               href="https://fatimareactweatherapp.netlify.app/"
               target="_blank"
+              rel="noreferrer"
             >
               hosted on Netlify
             </a>
