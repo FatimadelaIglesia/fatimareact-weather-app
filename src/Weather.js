@@ -1,102 +1,78 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "./Weather.css";
+import axios from "axios";
 import WeatherInfo from "./WeatherInfo";
 import WeatherForecast from "./WeatherForecast";
 
-export default function Weather({ defaultCity }) {
-  const [weatherData, setWeatherData] = useState({ ready: false });
-  const [city, setCity] = useState(defaultCity);
-  const [error, setError] = useState(null);
+export default function Weather(props) {
+  const [WeatherData, setWeatherData] = useState({ ready: false });
+  const [city, setCity] = useState(props.defaultCity);
 
-  useEffect(() => {
-    if (!city) return;
+  function handleResponse(response) {
+    console.log(response.data);
+    setWeatherData({
+      ready: true,
+      coordinates: response.data.coordinates,
+      temperature: response.data.temperature?.current || 0,
+      humidity: response.data.temperature?.humidity || 0,
+      wind: response.data.wind.speed || 0,
+      city: response.data.city || city,
+      date: new Date(response.data.time * 1000),
+      description: response.data.condition?.description || "",
+      iconURL:
+        response.data.condition?.icon_url ||
+        "https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png",
+      iconCode: response.data.condition?.icon || "",
+    });
+  }
+  function search() {
+    const apiKey = "515c9ddbeb3cda9061acfab71031839ea";
 
-    const apiKey = "4b3503b2f08a729413c4d33ef1186004";
-    const geoUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-    axios
-      .get(geoUrl)
-      .then((response) => {
-        const { lat, lon } = response.data.coord;
-
-        setWeatherData({
-          ready: true,
-          coordinates: { lat, lon },
-          temperature: response.data.main.temp,
-          humidity: response.data.main.humidity,
-          wind: response.data.wind.speed,
-          city: response.data.name,
-          date: new Date(response.data.dt * 1000),
-          description: response.data.weather[0].description,
-          icon: response.data.weather[0].icon,
-        });
-
-        setError(null);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("City not found or API key invalid.");
-        setWeatherData({ ready: false });
-      });
-  }, [city]);
-
+    let apiURL = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
+    axios.get(apiURL).then(handleResponse);
+  }
   function handleSubmit(event) {
     event.preventDefault();
-    // useEffect fetches automatically
+    search();
   }
 
   function handleCityChange(event) {
     setCity(event.target.value);
   }
 
-  if (error) {
+  if (WeatherData.ready) {
     return (
       <div className="Weather">
-        <p>{error}</p>
         <form onSubmit={handleSubmit}>
-          <input
-            type="search"
-            placeholder="Enter a city..."
-            onChange={handleCityChange}
-            value={city}
-          />
-          <button type="submit">Search</button>
+          <div className="row">
+            <div className="col-9">
+              <input
+                type="search"
+                placeholder="Enter a city.."
+                className="form-control"
+                autoFocus="on"
+                onChange={handleCityChange}
+              />
+            </div>
+            <div className="col-3">
+              <input
+                type="submit"
+                value="Search"
+                className="btn btn-primary w-100"
+              />
+            </div>
+          </div>
         </form>
+        <WeatherInfo data={WeatherData} />
+        <WeatherForecast
+          coordinates={{
+            lon: WeatherData.coordinates.longitude,
+            lat: WeatherData.coordinates.latitude,
+          }}
+        />
       </div>
     );
+  } else {
+    search();
   }
-
-  if (!weatherData.ready) {
-    return <p>Loading weather...</p>;
-  }
-
-  return (
-    <div className="Weather">
-      <form onSubmit={handleSubmit}>
-        <div className="row">
-          <div className="col-9">
-            <input
-              type="search"
-              placeholder="Enter a city..."
-              className="form-control"
-              autoFocus
-              onChange={handleCityChange}
-              value={city}
-            />
-          </div>
-          <div className="col-3">
-            <input
-              type="submit"
-              value="Search"
-              className="btn btn-primary w-100"
-            />
-          </div>
-        </div>
-      </form>
-
-      <WeatherInfo data={weatherData} />
-      <WeatherForecast coordinates={weatherData.coordinates} />
-    </div>
-  );
 }

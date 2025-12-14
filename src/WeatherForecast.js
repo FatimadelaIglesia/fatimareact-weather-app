@@ -1,50 +1,43 @@
 import React, { useState, useEffect } from "react";
+import "./WeatherForecast.css";
 import axios from "axios";
 import WeatherForecastDay from "./WeatherForecastDay";
-import "./WeatherForecast.css";
 
-export default function WeatherForecast({ coordinates }) {
+export default function WeatherForecast(props) {
   const [loaded, setLoaded] = useState(false);
   const [forecast, setForecast] = useState(null);
-  const [error, setError] = useState(null);
+
+  const { lat, lon } = props.coordinates || {};
 
   useEffect(() => {
-    if (!coordinates) return;
+    if (!lat || !lon) return;
 
-    const apiKey = "4b3503b2f08a729413c4d33ef1186004";
-    const apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
+    setLoaded(false);
+
+    const apiKey = "515c9ddbeb3cda9061acfab71031839e";
+    const apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${lon}&lat=${lat}&key=${apiKey}&units=metric`;
 
     axios
       .get(apiUrl)
       .then((response) => {
-        if (!response.data.daily) {
-          setError("No forecast data available.");
-          return;
-        }
         setForecast(response.data.daily);
         setLoaded(true);
-        setError(null);
       })
-      .catch((err) => {
-        console.error(err);
-        setError("Unable to fetch forecast.");
+      .catch((error) => {
+        console.error("Error fetching forecast:", error);
       });
-  }, [coordinates]);
-
-  if (error) {
-    return <p>{error}</p>;
-  }
+  }, [lat, lon]);
 
   if (!loaded) {
-    return <p>Loading forecast...</p>;
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="WeatherForecast">
       <div className="row">
-        {forecast.slice(1, 6).map((day, index) => (
+        {forecast.slice(0, 5).map((dailyForecast, index) => (
           <div className="col" key={index}>
-            <WeatherForecastDay data={day} />
+            <WeatherForecastDay data={dailyForecast} />
           </div>
         ))}
       </div>
