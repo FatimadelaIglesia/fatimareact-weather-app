@@ -10,14 +10,16 @@ export default function WeatherForecastDay({ data }) {
 
   return (
     <div className="WeatherForecast-day">
-      <div>{formatDay(data.time)}</div>
-      <WeatherIcon code={data.condition.icon} size={36} />
+      <div>{formatDay(data.dt)}</div>
+
+      <WeatherIcon code={data.weather[0].icon} size={36} />
+
       <div className="WeatherForecast-temperatures">
         <span className="WeatherForecast-temperature-max">
-          {Math.round(data.temperature.maximum)}°
+          {Math.round(data.main.temp_max)}°
         </span>
         <span className="WeatherForecast-temperature-min">
-          {Math.round(data.temperature.minimum)}°
+          {Math.round(data.main.temp_min)}°
         </span>
       </div>
     </div>

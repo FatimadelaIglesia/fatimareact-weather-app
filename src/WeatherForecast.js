@@ -15,14 +15,19 @@ export default function WeatherForecast(props) {
     setLoaded(false);
 
     const apiKey = "3944928100fff63d399c10d8e59aaf14";
-    const apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+
     axios
       .get(apiUrl)
       .then((response) => {
-        setForecast(response.data.daily);
+        // one forecast per day (8 x 3h = 24h)
+        const dailyForecast = response.data.list.filter(
+          (item, index) => index % 8 === 0
+        );
+
+        setForecast(dailyForecast);
         setLoaded(true);
       })
-
       .catch((error) => {
         console.error("Error fetching forecast:", error);
       });
