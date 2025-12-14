@@ -1,4 +1,4 @@
-import "./styles.css";
+import "./App.css";
 import { StrictMode } from "react";
 import Weather from "./Weather";
 
